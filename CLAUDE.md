@@ -77,7 +77,7 @@ arch linux docker dev container + podman service management (21 service scripts)
 
 | need | go to |
 |------|-------|
-| network inventory & topology | network/inventory.md |
+| network inventory & topology | @network/CLAUDE.md |
 | bootstrap repo | bootstrap/ (submodule: SkogAI/bootstrap) |
 | container tooling | container/ (submodule: SkogAI/container) |
 | ansible roles | bootstrap/roles/ |
