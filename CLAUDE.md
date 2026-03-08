@@ -59,6 +59,12 @@ arch linux docker dev container + podman service management (21 service scripts)
 - notification channels: whatsapp, slack, git issues
 - remote orchestration
 
+## todo
+- [ ] generate headscale service key for soft-serve tailscale enrollment
+- [ ] install tailscale on soft-serve (`pacman -S tailscale`, `tailscale up --login-server=$HEADSCALE_URL --hostname=soft-serve`)
+- [ ] add `tailscale` ansible role to bootstrap playbook (after `users`, before `packages`)
+- [ ] approve subnet routes in headscale for workstation (currently not being pushed)
+
 </goals>
 
 <decisions>
