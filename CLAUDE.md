@@ -35,7 +35,7 @@ one-liner arch linux provisioning. clones from github, runs `bootstrap.sh`.
 
 **testing**: `pat.vault.test` encrypted with `password1` (via `pat.password.example`) for container/CI use. real `pat.vault` uses production vault password.
 
-**dev/**: Dockerfile, docker-compose.yml, run.sh, test-bootstrap.sh — bare arch container simulating fresh archinstall VM.
+**dev/**: Dockerfile, docker-compose.yml, run.sh — bare arch container simulating fresh archinstall VM.
 
 ### container/ — `SkogAI/container`
 arch linux docker dev container + podman service management (21 service scripts).
