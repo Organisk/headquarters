@@ -1,0 +1,41 @@
+---
+# install yay
+
+- name: Ensure base-devel and git are installed (required for building AUR packages)
+  become: true
+  community.general.pacman:
+    name:
+      - base-devel
+      - git
+    state: present
+
+- name: Check if yay is already installed
+  ansible.builtin.stat:
+    path: /usr/bin/yay
+  register: yay_stat
+
+- name: Clone yay repository from AUR
+  become: true
+  become_user: aur_builder
+  ansible.builtin.git:
+    repo: 'https://aur.archlinux.org/yay.git'
+    dest: '/home/aur_builder/yay'
+    update: true
+    version: master
+  when: not yay_stat.stat.exists
+
+- name: Build and install yay
+  become: true
+  become_user: aur_builder
+  ansible.builtin.command:
+    cmd: makepkg -si --noconfirm --noprogressbar
+    chdir: /home/aur_builder/yay
+    creates: /usr/bin/yay
+  when: not yay_stat.stat.exists
+
+- name: Clean up yay build directory
+  become: true
+  ansible.builtin.file:
+    path: /home/aur_builder/yay
+    state: absent
+  when: not yay_stat.stat.exists

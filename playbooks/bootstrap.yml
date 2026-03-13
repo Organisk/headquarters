@@ -1,0 +1,21 @@
+---
+- name: Bootstrap Arch Linux
+  hosts: all
+
+  vars_files:
+    - ../vars/main.yml
+    - ../vars/packages.yml
+
+  roles:
+    - role: users
+      tags: [users]
+    - role: packages
+      tags: [packages]
+    - role: secrets
+      tags: [secrets]
+    - role: bitwarden
+      tags: [bitwarden]
+    - role: dolt
+      tags: [dolt]
+    - role: claude
+      tags: [claude]

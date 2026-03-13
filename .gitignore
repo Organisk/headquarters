@@ -1,1 +1,7 @@
 /MERGEME
+pat
+.venv
+*.swp
+*.swo
+*~
+/tmp

@@ -1,0 +1,39 @@
+---
+# setup aur builder user for managing aur packages
+# aur helpers cannot run as root, so we need a dedicated user
+
+- name: "Packages | Create the aur_builder user"
+  become: true
+  ansible.builtin.user:
+    name: aur_builder
+    create_home: true
+    group: wheel
+    comment: "AUR package builder"
+    shell: /bin/bash
+
+- name: "Packages | Ensure aur_builder home directory has correct permissions"
+  become: true
+  ansible.builtin.file:
+    path: /home/aur_builder
+    state: directory
+    owner: aur_builder
+    group: wheel
+    mode: "0750"
+
+- name: "Packages | Allow the aur_builder user to run sudo pacman without a password"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/11-install-aur_builder
+    line: "aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+    create: true
+    mode: "0644"
+    validate: "visudo -cf %s"
+
+- name: "Packages | Allow wheel group users to become aur_builder without a password"
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/12-wheel-to-aur_builder
+    line: "%wheel ALL=(aur_builder) NOPASSWD: ALL"
+    create: true
+    mode: "0644"
+    validate: "visudo -cf %s"

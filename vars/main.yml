@@ -1,0 +1,8 @@
+---
+# Shared Variables - Source of Truth
+
+user_name: "skogix"
+real_name: "Emil Skogsund"
+user_email: "emil@skogsund.se"
+
+machine_hostname: "{{ inventory_hostname }}"
