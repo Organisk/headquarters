@@ -1,0 +1,14 @@
+---
+- name: Provision claude-home
+  hosts: claude-home
+
+  vars_files:
+    - ../vars/claude-home.yml
+
+  roles:
+    - role: network
+      tags: [network]
+    - role: packages
+      tags: [packages]
+    - role: claude
+      tags: [claude]

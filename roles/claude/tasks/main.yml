@@ -1,7 +1,4 @@
 ---
-# claude user provisioning
-# creates the claude user with wheel group access and basic home structure
-
 - name: Create claude user
   become: true
   ansible.builtin.user:

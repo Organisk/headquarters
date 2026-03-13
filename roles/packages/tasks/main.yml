@@ -1,5 +1,11 @@
-# handle regular package management
-- name: Update pacman package database
+---
+- name: Setup AUR builder user
+  ansible.builtin.include_tasks: aur_user.yml
+
+- name: Install yay AUR helper
+  ansible.builtin.include_tasks: aur_install_yay.yml
+
+- name: Update pacman database
   become: true
   community.general.pacman:
     update_cache: true
@@ -9,7 +15,7 @@
   community.general.pacman:
     upgrade: true
 
-- name: Install packages from list
+- name: Install packages
   become: true
   community.general.pacman:
     name: "{{ packages }}"

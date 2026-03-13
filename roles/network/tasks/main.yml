@@ -1,0 +1,40 @@
+---
+- name: Set hostname
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+
+- name: Set hostname in /etc/hostname
+  become: true
+  ansible.builtin.copy:
+    content: "{{ hostname }}\n"
+    dest: /etc/hostname
+
+- name: Enable and start tailscale
+  become: true
+  ansible.builtin.systemd:
+    name: tailscaled
+    state: started
+    enabled: true
+
+- name: Check tailscale status
+  become: true
+  ansible.builtin.command:
+    cmd: tailscale status
+  register: ts_status
+  changed_when: false
+  failed_when: false
+
+- name: Join tailscale to headscale
+  become: true
+  ansible.builtin.command:
+    cmd: >
+      tailscale up
+      --login-server={{ headscale_url }}
+      --hostname={{ tailscale_hostname }}
+      --accept-routes
+  when:
+    - headscale_url | length > 0
+    - ts_status.rc != 0 or 'Logged out' in (ts_status.stdout | default(''))
+  register: ts_up
+  changed_when: ts_up.rc == 0

@@ -1,0 +1,46 @@
+---
+hostname: "claude-home"
+
+# packages — minimal server set
+packages:
+  - base-devel
+  - git
+  - github-cli
+  - vim
+  - tmux
+  - htop
+  - curl
+  - wget
+  - jq
+  - yq
+  - fd
+  - ripgrep
+  - fzf
+  - bat
+  - tree
+  - zoxide
+  - less
+  - unzip
+  - zip
+  - zsh
+  - python
+  - python-uv
+  - gnupg
+  - pinentry
+  - openssh
+  - tailscale
+
+aur_packages:
+  - claude-code
+  - lazygit
+  - neovim-nightly
+
+# tailscale
+headscale_url: ""  # set before running or pass as extra var
+tailscale_hostname: "claude-home"
+
+# claude user
+claude_user: "claude"
+claude_shell: /bin/zsh
+claude_groups:
+  - wheel
