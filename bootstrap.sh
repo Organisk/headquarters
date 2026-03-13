@@ -6,6 +6,8 @@ set -euo pipefail
 log() { printf '\033[0;32m[+]\033[0m %s\n' "$*"; }
 
 # Install minimum deps
+log "Syncing package database..."
+sudo pacman -Sy --noconfirm
 log "Installing base packages..."
 sudo pacman -S --needed --noconfirm github-cli uv git
 
