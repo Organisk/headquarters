@@ -10,41 +10,56 @@ provisioning and guardian infrastructure for claude's dedicated environment on t
 
 | property | value |
 |----------|-------|
-| host | `claude-home` (was `soft-serve`) / `10.10.0.25` |
+| host | `claude-home` / `10.10.0.25` |
 | os | Arch Linux (rolling) |
-| hypervisor | QEMU/KVM |
+| hypervisor | QEMU/KVM (on pve01/pve02) |
 | ram | 5.6 GiB |
-| disk | 30G (/dev/sda: 1G boot + 29G root) |
+| disk | 29G root (18GB free) |
 | kernel | 6.19.6-arch1-1 |
 | boot | BIOS/Legacy, GRUB, MBR |
-| python | 3.14 (repo current, not yet installed — base install only) |
-| claude user | **does not exist yet** |
+| services | sshd, cloudflared, tailscaled |
 | install log | install-log.md |
 
 </target>
 
-<submodules>
+<quickstart>
 
-### bootstrap/ — `SkogAI/bootstrap`
-one-liner arch linux provisioning. clones from github, runs `bootstrap.sh`.
+```bash
+# provision claude-home (run on the server itself)
+./run.sh
 
-**flow**: `bootstrap.sh` → `sudo pacman -S github-cli uv git` → `uv tool install ansible-core` → `ansible-vault view pat.vault.test` → `gh auth login` → `ansible-galaxy collection install` → `ansible-playbook playbooks/bootstrap.yml`
+# or with tailscale authkey
+HEADSCALE_AUTHKEY=<key> ./run.sh
+
+# run specific role only
+ansible-playbook playbooks/claude-home.yml --connection=local --inventory localhost, --tags packages
+```
+
+</quickstart>
+
+<structure>
+
+```
+roles/
+├── packages/   — pacman package installation
+├── network/    — tailscale + network config
+└── claude/     — claude user environment
+playbooks/
+└── claude-home.yml  — main playbook (packages → network → claude)
+vars/
+└── claude-home.yml  — variables for provisioning
+network/
+├── inventory.md     — full host inventory for Organisk server park
+├── topology.html    — interactive network topology explorer
+└── CLAUDE.md
+```
 
 **playbook roles** (in order):
-1. **users** — wheel group, aur_builder user, yay AUR helper, pacman packages
-2. **packages** — full workstation package list (53 pacman + 20 AUR packages)
-3. **secrets** — clones SSH keys from github.com/skogai/secrets
-4. **bitwarden** — bitwarden integration
-5. **dolt** — dolt database + systemd service
+1. **packages** — pacman package installation
+2. **network** — tailscale enrollment, network configuration
+3. **claude** — claude user environment setup
 
-**testing**: `pat.vault.test` encrypted with `password1` (via `pat.password.example`) for container/CI use. real `pat.vault` uses production vault password.
-
-**dev/**: Dockerfile, docker-compose.yml, run.sh — bare arch container simulating fresh archinstall VM.
-
-### container/ — `SkogAI/container`
-arch linux docker dev container + podman service management (21 service scripts).
-
-</submodules>
+</structure>
 
 <goals>
 
@@ -52,11 +67,10 @@ arch linux docker dev container + podman service management (21 service scripts)
 - arch linux installed via manual pacstrap (archinstall had python 3.13/3.14 mismatch)
 - hostname `claude-home`, root + skogix user, sshd + NetworkManager enabled
 - SSH key auth configured, passwordless sudo for wheel
-- **status: awaiting reboot into installed system**
+- tailscale + cloudflared running
 
-## phase 1: bootstrap (next)
-- clone `SkogAI/bootstrap`, run `bootstrap.sh` — gh auth + ansible playbook
-- previous blocker in container: yay build OOM killed (should work on real hardware with 5.6G RAM)
+## phase 1: bootstrap (in progress)
+- provisioning via `./run.sh` — ansible playbook with packages/network/claude roles
 - extend with claude user role (currently only provisions `skogix`)
 
 ## phase 2: ansible provisioning
@@ -70,10 +84,12 @@ arch linux docker dev container + podman service management (21 service scripts)
 - remote orchestration
 
 ## todo
-- [ ] generate headscale service key for soft-serve tailscale enrollment
-- [ ] install tailscale on soft-serve (`pacman -S tailscale`, `tailscale up --login-server=$HEADSCALE_URL --hostname=soft-serve`)
-- [ ] add `tailscale` ansible role to bootstrap playbook (after `users`, before `packages`)
+- [x] ~~generate headscale service key for soft-serve tailscale enrollment~~ (done 2026-03-13)
+- [x] ~~install tailscale on soft-serve~~ (done — tailscaled running)
+- [x] ~~add tailscale/network ansible role~~ (done — `network` role in playbook)
 - [ ] approve subnet routes in headscale for workstation (currently not being pushed)
+- [ ] create claude user and environment
+- [ ] set up guardian health checks and monitoring
 
 </goals>
 
@@ -94,12 +110,11 @@ arch linux docker dev container + podman service management (21 service scripts)
 | need | go to |
 |------|-------|
 | install log & decisions | install-log.md |
-| network inventory & topology | @network/CLAUDE.md |
-| bootstrap repo | bootstrap/ (submodule: SkogAI/bootstrap) |
-| container tooling | container/ (submodule: SkogAI/container) |
-| ansible roles | bootstrap/roles/ |
-| package lists | bootstrap/vars/packages.yml |
-| dev/test container | bootstrap/dev/ |
+| network inventory & topology | network/CLAUDE.md |
+| ansible roles | roles/ |
+| playbooks | playbooks/claude-home.yml |
+| variables | vars/claude-home.yml |
+| network topology (visual) | network/topology.html |
 
 </routing>
 

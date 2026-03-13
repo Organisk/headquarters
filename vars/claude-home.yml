@@ -1,14 +1,21 @@
 ---
 hostname: "claude-home"
 
-# packages — minimal server set
+# packages
 packages:
+  # core
   - base-devel
   - git
   - github-cli
-  - vim
+  - openssh
+  - gnupg
+  - pinentry
+  - zsh
   - tmux
-  - htop
+  - sudo
+  # editors
+  - vim
+  # cli tools
   - curl
   - wget
   - jq
@@ -22,19 +29,37 @@ packages:
   - less
   - unzip
   - zip
-  - zsh
+  - direnv
+  - just
+  - chezmoi
+  - inetutils
+  # languages & runtimes
   - python
   - python-uv
-  - gnupg
-  - pinentry
-  - inetutils
-  - openssh
+  - python-yaml
+  - python-jinja
+  - nodejs
+  - go
+  # ansible
+  - ansible
+  - ansible-core
+  # network & diagnostics
+  - nmap
+  - rsync
+  - lsof
+  - strace
+  - btop
+  - htop
+  # containers
+  - podman
+  # tailscale (backup connectivity)
   - tailscale
 
 aur_packages:
   - claude-code
   - lazygit
   - neovim-nightly
+  - oh-my-zsh-git
 
 # tailscale
 headscale_url: "https://hs.aldervall.se"
