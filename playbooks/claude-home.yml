@@ -6,9 +6,9 @@
     - ../vars/claude-home.yml
 
   roles:
-    - role: network
-      tags: [network]
     - role: packages
       tags: [packages]
+    - role: network
+      tags: [network]
     - role: claude
       tags: [claude]
