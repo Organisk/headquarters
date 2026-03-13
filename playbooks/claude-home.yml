@@ -1,6 +1,6 @@
 ---
 - name: Provision claude-home
-  hosts: claude-home
+  hosts: all
 
   vars_files:
     - ../vars/claude-home.yml
