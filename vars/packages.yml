@@ -1,75 +1,13 @@
 ---
-# Packages from pacman
+# Minimal packages for bootstrap testing
+# Full lists in packages-full.yml
 packages:
-  - picom
-  - redshift
-  - dex
-  - dunst
-  - xss-lock
-  - feh
-  - btop
-  - dolt
-  - yq
-  - x11-ssh-askpass
-  - nvm
-  - ansible
-  - ansible-core
   - base
   - base-devel
-  - bat
-  - direnv
-  - dunst
-  - feh
-  - firefox
-  - fzf
   - git
-  - github-cli
-  - kitty
-  - less
-  - just
-  - mandoc
-  - ncspot
-  - network-manager-applet
-  - networkmanager
-  - nvm
-  - picom
-  - python-uv
-  - ripgrep
-  - tree
-  - unzip
-  - uv
-  - wget
-  - wireplumber
-  - xclip
-  - xdotool
-  - jq
-  - fd
-  - zip
-  - unzip
-  - zoxide
-  - tmux
   - zsh
-  - pinentry
-  - gnupg
+  - jq
+  - tree
 
-# Packages from AUR via yay
-aur_packages:
-  - claude-code
-  - google-chrome
-  - neovim-nightly
-  - pwvucontrol
-  - fabric-ai
-  - xdotool
-  - nvm
-  - vesktop
-  - lazydocker
-  - lazygit
-  - beads-git
-  - zed
-  - lazybeads-git
-  - rbw
-  - rofi
-  - rofi-rbw
-  - bitwarden-systemd
-  - brave
-  - brave-extension-bitwarden-git
+# Skip AUR in dev/testing — too slow to build from source
+aur_packages: []

@@ -11,11 +11,12 @@
       tags: [users]
     - role: packages
       tags: [packages]
-    - role: secrets
-      tags: [secrets]
-    - role: bitwarden
-      tags: [bitwarden]
-    - role: dolt
-      tags: [dolt]
     - role: claude
       tags: [claude]
+    # these need real hardware / network:
+    # - role: secrets
+    #   tags: [secrets]
+    # - role: bitwarden
+    #   tags: [bitwarden]
+    # - role: dolt
+    #   tags: [dolt]
