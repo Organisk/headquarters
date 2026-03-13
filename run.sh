@@ -7,6 +7,9 @@ log() { printf '\033[0;32m[+]\033[0m %s\n' "$*"; }
 
 cd "$(dirname "$0")"
 
+# source .env if present
+[[ -f .env ]] && source .env
+
 # install minimum deps
 if ! command -v ansible-playbook &>/dev/null; then
   log "Installing ansible..."
@@ -19,6 +22,14 @@ fi
 log "Installing ansible collections..."
 ansible-galaxy collection install community.general -p ./tmp/collections
 
+# tailscale authkey — set this before running, or pass via: ./run.sh -e headscale_authkey=<key>
+HEADSCALE_AUTHKEY="${HEADSCALE_AUTHKEY:-}"
+
+EXTRA_VARS=()
+if [[ -n "$HEADSCALE_AUTHKEY" ]]; then
+  EXTRA_VARS+=(-e "headscale_authkey=$HEADSCALE_AUTHKEY")
+fi
+
 # run playbook locally
 log "Running claude-home playbook..."
-ansible-playbook playbooks/claude-home.yml --connection=local --inventory localhost, "$@"
+ansible-playbook playbooks/claude-home.yml --connection=local --inventory localhost, "${EXTRA_VARS[@]}" "$@"

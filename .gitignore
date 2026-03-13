@@ -5,3 +5,4 @@ pat
 *.swo
 *~
 /tmp
+.env

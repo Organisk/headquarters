@@ -27,6 +27,7 @@ packages:
   - python-uv
   - gnupg
   - pinentry
+  - inetutils
   - openssh
   - tailscale
 
@@ -36,7 +37,7 @@ aur_packages:
   - neovim-nightly
 
 # tailscale
-headscale_url: ""  # set before running or pass as extra var
+headscale_url: "https://hs.aldervall.se"
 tailscale_hostname: "claude-home"
 
 # claude user

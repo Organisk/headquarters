@@ -31,10 +31,12 @@
     cmd: >
       tailscale up
       --login-server={{ headscale_url }}
+      --authkey={{ headscale_authkey }}
       --hostname={{ tailscale_hostname }}
       --accept-routes
   when:
     - headscale_url | length > 0
+    - headscale_authkey | default('') | length > 0
     - ts_status.rc != 0 or 'Logged out' in (ts_status.stdout | default(''))
   register: ts_up
   changed_when: ts_up.rc == 0
