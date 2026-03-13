@@ -10,12 +10,16 @@ provisioning and guardian infrastructure for claude's dedicated environment on t
 
 | property | value |
 |----------|-------|
-| host | `soft-serve` / `10.10.0.25` |
+| host | `claude-home` (was `soft-serve`) / `10.10.0.25` |
 | os | Arch Linux (rolling) |
-| ram | 2GB (expandable on request) |
-| disk | 9GB total (expandable on request) |
-| python | 3.14 (system) |
+| hypervisor | QEMU/KVM |
+| ram | 5.6 GiB |
+| disk | 30G (/dev/sda: 1G boot + 29G root) |
+| kernel | 6.19.6-arch1-1 |
+| boot | BIOS/Legacy, GRUB, MBR |
+| python | 3.14 (repo current, not yet installed — base install only) |
 | claude user | **does not exist yet** |
+| install log | install-log.md |
 
 </target>
 
@@ -44,9 +48,15 @@ arch linux docker dev container + podman service management (21 service scripts)
 
 <goals>
 
-## phase 1: bootstrap (in progress)
-- clone `SkogAI/bootstrap`, run `bootstrap.sh` — **working through gh auth + ansible playbook**
-- current blocker: yay build gets OOM killed in container (works on real hardware)
+## phase 0: base install (done 2026-03-13)
+- arch linux installed via manual pacstrap (archinstall had python 3.13/3.14 mismatch)
+- hostname `claude-home`, root + skogix user, sshd + NetworkManager enabled
+- SSH key auth configured, passwordless sudo for wheel
+- **status: awaiting reboot into installed system**
+
+## phase 1: bootstrap (next)
+- clone `SkogAI/bootstrap`, run `bootstrap.sh` — gh auth + ansible playbook
+- previous blocker in container: yay build OOM killed (should work on real hardware with 5.6G RAM)
 - extend with claude user role (currently only provisions `skogix`)
 
 ## phase 2: ansible provisioning
@@ -83,6 +93,7 @@ arch linux docker dev container + podman service management (21 service scripts)
 
 | need | go to |
 |------|-------|
+| install log & decisions | install-log.md |
 | network inventory & topology | @network/CLAUDE.md |
 | bootstrap repo | bootstrap/ (submodule: SkogAI/bootstrap) |
 | container tooling | container/ (submodule: SkogAI/container) |

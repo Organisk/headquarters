@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh -o ConnectTimeout=5 root@10.10.0.25 'lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINTS,UUID /dev/sda && echo \"=== PARTED ===\" && parted /dev/sda print 2>&1 && echo \"=== BOOT MODE ===\" && [ -d /sys/firmware/efi ] && echo \"UEFI\" || echo \"BIOS/Legacy\"' 2>&1)"
+    ]
+  }
+}
