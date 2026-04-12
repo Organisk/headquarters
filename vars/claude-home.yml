@@ -58,8 +58,6 @@ packages:
 aur_packages:
   - claude-code
   - lazygit
-  - neovim-nightly
-  - oh-my-zsh-git
 
 # tailscale
 headscale_url: "https://hs.aldervall.se"
